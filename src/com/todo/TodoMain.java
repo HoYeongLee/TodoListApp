@@ -18,13 +18,8 @@ public class TodoMain {
 		
 		File f = new File("todolist.txt");
 		
-		if(f.exists()) {
-			TodoUtil.loadList(l, "todolist.txt");
-			TodoUtil.listAll(l);
-			System.out.println(l.getList().size() + "개의 항목을 읽었습니다.");
-		}
-		else
-			System.out.println("todolist.txt 파일이 없습니다.");
+		TodoUtil.loadList(l, "todolist.txt");
+		TodoUtil.listAll(l);
 		
 		Menu.displaymenu();
 		do {
@@ -55,44 +50,47 @@ public class TodoMain {
 					break;
 				}
 				l.sortByName();
-				System.out.println("제목순으로 저장했습니다.");
+				System.out.println("제목순으로 정렬했습니다.");
 				isList = true;
 				break;
 
 			case "ls_name_desc":
-				if(l.getList().isEmpty()) {
-					System.out.println("저장된 메모가 없습니다!");
-					break;
-				}
 				l.sortByName();
 				l.reverseList();
-				System.out.println("제목역순으로 정렬했습니다.");
 				isList = true;
 				break;
 				
-			case "ls_date":
-				if(l.getList().isEmpty()) {
-					System.out.println("저장된 메모가 없습니다!");
-					break;
-				}
+			case "ls_date_asc":
 				l.sortByDate();
-				System.out.println("날짜순으로 정렬했습니다.");
 				isList = true;
 				break;
-
+				
+			case "ls_date_desc":
+				l.reverseDate();
+				isList = true;
+				break;
+				
 			case "exit":
 				quit = true;
 				TodoUtil.saveList(l, "todolist.txt");
-				if(l.getList().isEmpty()) {
-					System.out.println("저장된 메모가 없습니다!");
-					break;
-				}
-				System.out.println("모든 데이터를 저장했습니다.");
 				break;
 				
 			case "help":
 				Menu.displaymenu();
 				break;
+				
+			case "find":
+				TodoUtil.findList(l, sc.next());
+				break;
+				
+			case "find_cate":
+				TodoUtil.findCategory(l, sc.next());
+				break;
+		
+			case "ls_cate":
+				TodoUtil.listCategory(l);
+				break;
+				
 			default:
 				System.out.println("\n잘못 입력하셨습니다. (help - 도움말)");
 				break;

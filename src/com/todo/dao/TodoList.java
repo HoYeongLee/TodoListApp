@@ -29,25 +29,47 @@ public class TodoList {
 		return new ArrayList<TodoItem>(list);
 	}
 
-	public void sortByName() {
-		Collections.sort(list, new TodoSortByName());
-
-	}
 
 	public void listAll() {
-		System.out.println("<저장된 메모>");
+		int i = 1;
+		System.out.println("\n<전체 목록, 총 "+ list.size() +  "개>");
 		for (TodoItem myitem : list) {
-			System.out.println(myitem.toString());
+			System.out.println(i++  +". " + myitem.toString());
 		}
 	}
 	
+	public void sortByName() {
+		Collections.sort(list, new TodoSortByName());
+	}
+	
 	public void reverseList() {
+		if(list.isEmpty()) {
+			System.out.println("저장된 메모가 없습니다!");
+			return;
+		}
 		Collections.reverse(list);
+		System.out.println("제목역순으로 정렬했습니다.");	
 	}
 
 	public void sortByDate() {
+		if(list.isEmpty()) {
+			System.out.println("저장된 메모가 없습니다!");
+			return;
+		}
 		Collections.sort(list, new TodoSortByDate());
+		System.out.println("날짜순으로 정렬했습니다.");
 	}
+	
+	public void reverseDate() {
+		if(list.isEmpty()) {
+			System.out.println("저장된 메모가 없습니다!");
+			return;
+		}
+		Collections.sort(list, new TodoSortByDate());
+		Collections.reverse(list);
+		System.out.println("날짜 역순으로 정렬했습니다.");
+	}
+	
 
 	public int indexOf(TodoItem t) {
 		return list.indexOf(t);
