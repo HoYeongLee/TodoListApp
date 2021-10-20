@@ -1,6 +1,5 @@
 package com.todo;
 
-import java.io.File;
 import java.util.Scanner;
 
 import com.todo.dao.TodoList;
@@ -10,21 +9,18 @@ import com.todo.service.TodoUtil;
 public class TodoMain {
 	
 	public static void start() {
-		
+			
 		Scanner sc = new Scanner(System.in);
 		TodoList l = new TodoList();
-		boolean isList = false;
 		boolean quit = false;
-		
-		File f = new File("todolist.txt");
-		
-		TodoUtil.loadList(l, "todolist.txt");
+//		l.importData("todolist.txt");
+		l.bootItem(l.getList());
+		TodoUtil.lateListAll(l);
 		TodoUtil.listAll(l);
 		
 		Menu.displaymenu();
 		do {
 			Menu.prompt();
-			isList = false;
 			String choice = sc.next();
 			switch (choice) {
 
@@ -44,35 +40,28 @@ public class TodoMain {
 				TodoUtil.listAll(l);
 				break;
 
-			case "ls_name_asc":
-				if(l.getList().isEmpty()) {
-					System.out.println("저장된 메모가 없습니다!");
-					break;
-				}
-				l.sortByName();
+			case "ls_name":
 				System.out.println("제목순으로 정렬했습니다.");
-				isList = true;
+				TodoUtil.listAll(l, "title", 1);
 				break;
 
 			case "ls_name_desc":
-				l.sortByName();
-				l.reverseList();
-				isList = true;
+				System.out.println("제목역순으로 정렬했습니다.");
+				TodoUtil.listAll(l, "title", 0);
 				break;
 				
-			case "ls_date_asc":
-				l.sortByDate();
-				isList = true;
+			case "ls_date":
+				System.out.println("날짜순으로 정렬했습니다.");
+				TodoUtil.listAll(l, "due_date", 1);
 				break;
 				
 			case "ls_date_desc":
-				l.reverseDate();
-				isList = true;
+				System.out.println("날짜역순으로 정렬했습니다.");
+				TodoUtil.listAll(l, "due_date", 0);
 				break;
 				
 			case "exit":
 				quit = true;
-				TodoUtil.saveList(l, "todolist.txt");
 				break;
 				
 			case "help":
@@ -80,15 +69,44 @@ public class TodoMain {
 				break;
 				
 			case "find":
-				TodoUtil.findList(l, sc.next());
+				String keyword =sc.nextLine().trim();
+				TodoUtil.findList(l, keyword);
 				break;
 				
 			case "find_cate":
-				TodoUtil.findCategory(l, sc.next());
+				String cate = sc.nextLine().trim();
+				TodoUtil.findCategory(l, cate);
 				break;
 		
 			case "ls_cate":
 				TodoUtil.listCategory(l);
+				break;
+				
+			case "ls_comp":
+				TodoUtil.listAll(l, 1);
+				break;
+				
+			case "ls_uncomp":
+				TodoUtil.listAll(l, 0);
+				break;
+				
+			case "comp":
+				String number = sc.nextLine();
+				TodoUtil.completeItem(l, number, true);
+				break;
+				
+			case "uncomp":
+				number = sc.nextLine();
+				TodoUtil.completeItem(l, number, false);
+				break;
+				
+			case "ls_month":
+				number = sc.nextLine();
+				TodoUtil.listAllMonth(l);
+				break;
+				
+			case "ls_lated":
+				TodoUtil.lateListAll(l);
 				break;
 				
 			default:
@@ -96,7 +114,6 @@ public class TodoMain {
 				break;
 			}
 			
-			if(isList) l.listAll();
 		} while (!quit);
 		
 	}
